@@ -4,8 +4,6 @@ import com.twu.biblioteca.misc.OptionListener;
 import com.twu.biblioteca.model.Option;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Menu {
 
@@ -32,29 +30,24 @@ public class Menu {
 
     }
 
-    public void getUserOption() {
-        boolean userInputIsValid = false;
-        while(!userInputIsValid) {
-            try {
-                Scanner scanner = new Scanner(System.in);
-                int userInput = scanner.nextInt();
+    public boolean getUserOption(int userOption) {
+        int checkedUserOption = validateUserOption(userOption);
 
-                for (Option opt: options) {
-                    if (userInput == opt.getId()) {
-                        userInputIsValid = (opt.getName().equals("Quit"));
-                        Option option = new Option(userInput);
+        if (checkedUserOption != 0 && listener != null) {
+            listener.onOptionSelected(new Option(checkedUserOption));
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                        if (listener != null) {
-                            listener.onOptionSelected(option);
-                        }
-                    }
-                }
-                if (!userInputIsValid) System.out.println("Wrong option, please choose again!");
-
-            } catch (InputMismatchException exception) {
-                System.out.println("Please insert a number");
+    public int validateUserOption(int userOption) {
+        for (Option opt: options) {
+            if (userOption == opt.getId()) {
+                return opt.getId();
             }
         }
+        return 0;
     }
 
     public void setListener(OptionListener listener) {
