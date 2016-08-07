@@ -48,6 +48,8 @@ public class BibliotecaApp {
                                 System.out.println("No book found with this ID");
                             }
                             break;
+                        case 3:
+                            System.out.println("Thanks for using Biblioteca");
                     }
                 }
             }
