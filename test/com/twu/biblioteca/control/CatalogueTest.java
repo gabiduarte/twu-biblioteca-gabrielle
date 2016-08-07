@@ -16,33 +16,36 @@ public class CatalogueTest {
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private List<Book> books = new ArrayList<Book>();
     private List<Book> emptyBookList = new ArrayList<Book>();
+    private Catalogue catalogue = new Catalogue();
 
     @Before
     public void setup() {
         System.setOut(new PrintStream(outContent));
 
         Book book1 = new Book();
+        book1.setBookID(1);
         book1.setName("Harry Potter and the Cursed Child");
         book1.setAuthor("JK Rowling");
         book1.setYear(2016);
+        book1.setCheckedOut(false);
         books.add(book1);
 
         Book book2 = new Book();
+        book2.setBookID(2);
         book2.setName("Mockingjay");
         book2.setAuthor("Suzanne Collins");
         book2.setYear(2010);
+        book2.setCheckedOut(true);
         books.add(book2);
     }
 
     @Test
-    public void showListOfBooks() {
-        Catalogue catalogue = new Catalogue();
-        catalogue.showBookList(books);
+    public void shouldshowListOfBooksAvailable() {
+        catalogue.showAvailableBookList(books);
 
         String expectedString = "\n***** Books Available *****\n" +
-                "(BOOK | AUTHOR | YEAR)\n\n" +
-                "Harry Potter and the Cursed Child | JK Rowling | 2016\n" +
-                "Mockingjay | Suzanne Collins | 2010\n";
+                "(ID | BOOK | AUTHOR | YEAR)\n\n" +
+                "1 | Harry Potter and the Cursed Child | JK Rowling | 2016\n";
 
         assertEquals(expectedString, outContent.toString());
     }
@@ -50,8 +53,27 @@ public class CatalogueTest {
     @Test
     public void showMessageIfBookListIsEmpty() {
         Catalogue catalogue = new Catalogue();
-        catalogue.showBookList(emptyBookList);
+        catalogue.showAvailableBookList(emptyBookList);
 
         assertEquals("No books available\n", outContent.toString());
     }
+
+    @Test
+    public void shouldCheckOutBookSuccessfully() {
+        Book book = books.get(0);
+        catalogue.checkOutBook(book);
+        boolean expectedCheckedOutValueAfterSuccess = true;
+
+        assertTrue(expectedCheckedOutValueAfterSuccess == book.isCheckedOut());
+        assertEquals("Thank you! Enjoy the book\n", outContent.toString());
+    }
+
+    @Test
+    public void shouldShowUnsuccessfulMessageIfBookIsCheckedOut() {
+        Book book = books.get(1);
+        catalogue.checkOutBook(book);
+
+        assertEquals("That book is not available.\n", outContent.toString());
+    }
+
 }
