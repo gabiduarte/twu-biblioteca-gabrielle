@@ -17,12 +17,13 @@ public class BibliotecaApp {
         menu.setListener(new OptionListener() {
             @Override
             public void onOptionSelected(Option option) {
-
-                switch (option.getId()) {
-                    case 1:
-                        Catalogue catalogue = new Catalogue();
-                        catalogue.showBookList(catalogue.createBookList());
-                        break;
+                if (option != null) {
+                    switch (option.getId()) {
+                        case 1:
+                            Catalogue catalogue = new Catalogue();
+                            catalogue.showBookList(catalogue.createBookList());
+                            break;
+                    }
                 }
             }
         });
