@@ -1,6 +1,5 @@
 package com.twu.biblioteca.control;
 
-import com.twu.biblioteca.control.Catalogue;
 import com.twu.biblioteca.model.Book;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +36,8 @@ public class CatalogueTest {
         book2.setYear(2010);
         book2.setCheckedOut(true);
         books.add(book2);
+
+        catalogue.createBookList();
     }
 
     @Test
@@ -76,4 +77,10 @@ public class CatalogueTest {
         assertEquals("That book is not available.\n", outContent.toString());
     }
 
+    @Test
+    public void shouldReturnNullIfBookIDDoesntMatch() {
+        String book = books.get(0).getName();
+        assertEquals(book, catalogue.checkIfBookExistsInList(1).getName());
+        assertNull(catalogue.checkIfBookExistsInList(393));
+    }
 }

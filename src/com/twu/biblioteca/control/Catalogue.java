@@ -8,6 +8,8 @@ import java.util.List;
 
 public class Catalogue {
 
+    private static List<Book> books = new ArrayList<Book>();
+
     public void showAvailableBookList(List<Book> books) {
         if (books.size() > 0 ) {
             System.out.println("\n***** Books Available *****\n(ID | BOOK | AUTHOR | YEAR)\n");
@@ -33,15 +35,22 @@ public class Catalogue {
             System.out.println("That book is not available.");
         }
     }
-    public List<Book> getBookList() {
-        List<Book> books = new ArrayList<Book>();
 
+    public Book checkIfBookExistsInList(int userOption) {
+        for (Book book: books) {
+            if (userOption == book.getBookID()) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public void createBookList() {
         Book book1 = new Book();
         book1.setBookID(1);
         book1.setName("Harry Potter and the Cursed Child");
         book1.setAuthor("JK Rowling");
         book1.setYear(2016);
-        book1.setCheckedOut(false);
         books.add(book1);
 
         Book book2 = new Book();
@@ -49,10 +58,10 @@ public class Catalogue {
         book2.setName("Mockingjay");
         book2.setAuthor("Suzanne Collins");
         book2.setYear(2010);
-        book2.setCheckedOut(true);
         books.add(book2);
-
-        return books;
     }
 
+    public List<Book> getBookList() {
+        return books;
+    }
 }
