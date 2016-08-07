@@ -41,17 +41,16 @@ public class Menu {
 
                 for (Option opt: options) {
                     if (userInput == opt.getId()) {
-                        userInputIsValid = true;
+                        userInputIsValid = (opt.getName().equals("Quit"));
                         Option option = new Option(userInput);
 
                         if (listener != null) {
                             listener.onOptionSelected(option);
                         }
-
-                    } else {
-                        System.out.println("Wrong option, please choose again!");
                     }
                 }
+                if (!userInputIsValid) System.out.println("Wrong option, please choose again!");
+
             } catch (InputMismatchException exception) {
                 System.out.println("Please insert a number");
             }

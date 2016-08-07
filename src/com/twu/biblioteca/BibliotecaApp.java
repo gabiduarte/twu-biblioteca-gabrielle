@@ -14,6 +14,7 @@ public class BibliotecaApp {
 
         Menu menu = new Menu();
         menu.addOption(new Option(1, "List Books"));
+        menu.addOption(new Option(2, "Quit"));
         menu.setListener(new OptionListener() {
             @Override
             public void onOptionSelected(Option option) {
