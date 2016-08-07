@@ -10,6 +10,7 @@ public class BookTest {
     @Before
     public void setup() {
         book.setName("Harry Potter and the Cursed Child");
+        book.setAuthor("JK Rowling");
         book.setYear(2016);
     }
 
@@ -22,5 +23,8 @@ public class BookTest {
     public void getBookYear() {
         assertEquals(2016, book.getYear());
     }
+
+    @Test
+    public void getBookAuthor() { assertEquals("JK Rowling", book.getAuthor());}
 
 }
