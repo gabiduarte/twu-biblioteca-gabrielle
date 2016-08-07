@@ -9,6 +9,10 @@ public class Option {
         this.name = name;
     }
 
+    public Option(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
