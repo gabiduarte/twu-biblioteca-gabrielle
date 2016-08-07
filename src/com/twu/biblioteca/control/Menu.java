@@ -1,4 +1,7 @@
-package com.twu.biblioteca;
+package com.twu.biblioteca.control;
+
+import com.twu.biblioteca.misc.OptionListener;
+import com.twu.biblioteca.model.Option;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

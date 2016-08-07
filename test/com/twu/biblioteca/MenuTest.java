@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.control.Menu;
+import com.twu.biblioteca.model.Option;
 import org.junit.Before;
 import org.junit.Test;
 

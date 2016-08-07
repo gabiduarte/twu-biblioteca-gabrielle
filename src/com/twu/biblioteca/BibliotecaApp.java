@@ -1,6 +1,11 @@
 package com.twu.biblioteca;
 
 
+import com.twu.biblioteca.control.Catalogue;
+import com.twu.biblioteca.control.Menu;
+import com.twu.biblioteca.misc.OptionListener;
+import com.twu.biblioteca.model.Option;
+
 public class BibliotecaApp {
 
     public static void main(String[] args) {
@@ -12,13 +17,11 @@ public class BibliotecaApp {
         menu.setListener(new OptionListener() {
             @Override
             public void onOptionSelected(Option option) {
+
                 switch (option.getId()) {
                     case 1:
                         Catalogue catalogue = new Catalogue();
                         catalogue.showBookList(catalogue.createBookList());
-                        break;
-                    default:
-                        System.out.println("Insert a valid option");
                         break;
                 }
             }
