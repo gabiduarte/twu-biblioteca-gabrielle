@@ -15,7 +15,7 @@ public class Catalogue {
             System.out.println("\n***** Books Available *****\n(ID | BOOK | AUTHOR | YEAR)\n");
             for (int i = 0; i < books.size(); i++) {
                 Book currentBook = books.get(i);
-                if (currentBook.isCheckedOut()) break;
+                if (currentBook.isCheckedOut()) continue;
                 String currentBookID = Integer.toString(currentBook.getBookID());
                 String currentBookYear = Integer.toString(currentBook.getYear());
                 String output = currentBookID + " | " + currentBook.getName() + " | " + currentBook.getAuthor() + " | " + currentBookYear;
