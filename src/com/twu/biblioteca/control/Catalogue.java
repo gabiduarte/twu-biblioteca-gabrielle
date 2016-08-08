@@ -10,16 +10,21 @@ public class Catalogue {
 
     private static List<Book> books = new ArrayList<Book>();
 
-    public void showAvailableBookList(List<Book> books) {
+    public void showBookList(List<Book> books, boolean showAvailableBooks) {
         if (books.size() > 0 ) {
             System.out.println("\n***** Books Available *****\n(ID | BOOK | AUTHOR | YEAR)\n");
             for (int i = 0; i < books.size(); i++) {
                 Book currentBook = books.get(i);
-                if (currentBook.isCheckedOut()) continue;
+
+                if (showAvailableBooks) {
+                    if (currentBook.isCheckedOut()) continue;
+                } else {
+                    if (!currentBook.isCheckedOut()) continue;
+                }
+
                 String currentBookID = Integer.toString(currentBook.getBookID());
                 String currentBookYear = Integer.toString(currentBook.getYear());
                 String output = currentBookID + " | " + currentBook.getName() + " | " + currentBook.getAuthor() + " | " + currentBookYear;
-
                 System.out.println(output);
             }
         } else {
@@ -27,12 +32,21 @@ public class Catalogue {
         }
     }
 
-    public void checkOutBook(Book book) {
-        if (!book.isCheckedOut()) {
-            book.setCheckedOut(true);
-            System.out.println("Thank you! Enjoy the book");
+    public void manipulateBook(Book book, boolean isCheckingOut) {
+        if (isCheckingOut) {
+            if (!book.isCheckedOut()) {
+                book.setCheckedOut(true);
+                System.out.println("Thank you! Enjoy the book");
+            } else {
+                System.out.println("That book is not available.");
+            }
         } else {
-            System.out.println("That book is not available.");
+            if (book.isCheckedOut()) {
+                book.setCheckedOut(false);
+                System.out.println("Thank you for returning the book.");
+            } else {
+                System.out.println("That is not a valid book to return.");
+            }
         }
     }
 

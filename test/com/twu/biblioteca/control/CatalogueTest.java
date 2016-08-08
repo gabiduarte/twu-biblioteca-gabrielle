@@ -42,7 +42,7 @@ public class CatalogueTest {
 
     @Test
     public void shouldshowListOfBooksAvailable() {
-        catalogue.showAvailableBookList(books);
+        catalogue.showBookList(books, true);
 
         String expectedString = "\n***** Books Available *****\n" +
                 "(ID | BOOK | AUTHOR | YEAR)\n\n" +
@@ -54,7 +54,7 @@ public class CatalogueTest {
     @Test
     public void showMessageIfBookListIsEmpty() {
         Catalogue catalogue = new Catalogue();
-        catalogue.showAvailableBookList(emptyBookList);
+        catalogue.showBookList(emptyBookList, true);
 
         assertEquals("No books available\n", outContent.toString());
     }
@@ -62,7 +62,7 @@ public class CatalogueTest {
     @Test
     public void shouldCheckOutBookSuccessfully() {
         Book book = books.get(0);
-        catalogue.checkOutBook(book);
+        catalogue.manipulateBook(book, true);
         boolean expectedCheckedOutValueAfterSuccess = true;
 
         assertTrue(expectedCheckedOutValueAfterSuccess == book.isCheckedOut());
@@ -70,9 +70,9 @@ public class CatalogueTest {
     }
 
     @Test
-    public void shouldShowUnsuccessfulMessageIfBookIsCheckedOut() {
+    public void shouldShowUnsuccessfulMessageIfBookIsAlreadyCheckedOut() {
         Book book = books.get(1);
-        catalogue.checkOutBook(book);
+        catalogue.manipulateBook(book, true);
 
         assertEquals("That book is not available.\n", outContent.toString());
     }
@@ -82,5 +82,22 @@ public class CatalogueTest {
         String book = books.get(0).getName();
         assertEquals(book, catalogue.checkIfBookExistsInList(1).getName());
         assertNull(catalogue.checkIfBookExistsInList(393));
+    }
+
+    @Test
+    public void shouldReturnBookSuccessfully() {
+        Book book = books.get(1);
+        catalogue.manipulateBook(book, false);
+        boolean expectedReturnValueAfterSuccess = false;
+        assertTrue(expectedReturnValueAfterSuccess == book.isCheckedOut());
+        assertEquals("Thank you for returning the book.\n", outContent.toString());
+    }
+
+    @Test
+    public void shouldShowUnsuccessfulMessageIfBookIsAlreadyReturned() {
+        Book book = books.get(0);
+        catalogue.manipulateBook(book, false);
+
+        assertEquals("That is not a valid book to return.\n", outContent.toString());
     }
 }

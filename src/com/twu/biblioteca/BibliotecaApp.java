@@ -8,7 +8,6 @@ import com.twu.biblioteca.model.Book;
 import com.twu.biblioteca.model.Option;
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
@@ -20,7 +19,8 @@ public class BibliotecaApp {
         Menu menu = new Menu();
         menu.addOption(new Option(1, "List Books"));
         menu.addOption(new Option(2, "Checkout Book"));
-        menu.addOption(new Option(3, "Quit"));
+        menu.addOption(new Option(3, "Return Book"));
+        menu.addOption(new Option(4, "Quit"));
 
         final Catalogue catalogue = new Catalogue();
         catalogue.createBookList();
@@ -31,11 +31,15 @@ public class BibliotecaApp {
                 if (option != null) {
                     switch (option.getId()) {
                         case 1:
-                            catalogue.showAvailableBookList(catalogue.getBookList());
+                            catalogue.showBookList(catalogue.getBookList(), true);
                             break;
                         case 2:
-                            System.out.println("Choose the book you want to checkout by ID");
-                            catalogue.showAvailableBookList(catalogue.getBookList());
+                        case 3:
+                            boolean isCheckingOut = (option.getId() == 2);
+                            String instruction = isCheckingOut ? "Choose the book you want to checkout by ID" : "Choose the book you want to return by ID";
+
+                            System.out.println(instruction);
+                            catalogue.showBookList(catalogue.getBookList(), isCheckingOut);
 
                             Scanner scanner = new Scanner(System.in);
                             int bookChosen = scanner.nextInt();
@@ -43,13 +47,14 @@ public class BibliotecaApp {
                             Book validatedBookChosen = catalogue.checkIfBookExistsInList(bookChosen);
 
                             if (validatedBookChosen != null) {
-                                catalogue.checkOutBook(validatedBookChosen);
+                                catalogue.manipulateBook(validatedBookChosen, isCheckingOut);
                             } else {
                                 System.out.println("No book found with this ID");
                             }
                             break;
-                        case 3:
+                        case 4:
                             System.out.println("Thanks for using Biblioteca");
+                            break;
                     }
                 }
             }
@@ -65,7 +70,7 @@ public class BibliotecaApp {
                 int userOption = scanner.nextInt();
                 sentOptionToListener = menu.getUserOption(userOption);
 
-                if (userOption == 3) quitMenu = true;
+                if (userOption == 4) quitMenu = true;
                 if (!sentOptionToListener) System.out.println("Please insert a valid option number");
 
             } catch (InputMismatchException exception) {
