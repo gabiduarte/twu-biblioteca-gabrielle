@@ -70,16 +70,16 @@ public class CatalogueTest {
         Book book = books.get(0);
         assertFalse(book.isCheckedOut());
 
-        bookCatalogue.changeStatus(book, true);
+        bookCatalogue.changeStatus(book, true, "Book");
         assertTrue(book.isCheckedOut());
     }
 
     @Test
     public void shouldReturnUnsuccessfulMessageIfMediaIsAlreadyCheckedOut() {
         Book book = books.get(1);
-        String bookStatus = bookCatalogue.changeStatus(book, true);
+        String bookStatus = bookCatalogue.changeStatus(book, true, "Book");
 
-        assertEquals("That book is not available", bookStatus);
+        assertEquals("That Book is not available", bookStatus);
     }
 
     @Test
@@ -94,15 +94,15 @@ public class CatalogueTest {
         Book book = books.get(1);
         assertTrue(book.isCheckedOut());
 
-        bookCatalogue.changeStatus(book, false);
+        bookCatalogue.changeStatus(book, false, "Book");
         assertFalse(book.isCheckedOut());
     }
 
     @Test
     public void shouldShowUnsuccessfulMessageIfMediaIsAlreadyReturned() {
         Book book = books.get(0);
-        String bookStatus = bookCatalogue.changeStatus(book, false);
+        String bookStatus = bookCatalogue.changeStatus(book, false, "Book");
 
-        assertEquals("That is not a valid book to return", bookStatus);
+        assertEquals("That is not a valid Book to return", bookStatus);
     }
 }

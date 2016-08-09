@@ -24,7 +24,8 @@ public class BibliotecaApp {
         menu.addOption(new Option(2, "Checkout Book"));
         menu.addOption(new Option(3, "Return Book"));
         menu.addOption(new Option(4, "List Movies"));
-        menu.addOption(new Option(5, "Quit"));
+        menu.addOption(new Option(5, "Checkout Movie"));
+        menu.addOption(new Option(6, "Quit"));
 
         final MovieCatalogue movieCatalogue = new MovieCatalogue();
         final BookCatalogue bookCatalogue = new BookCatalogue();
@@ -66,7 +67,7 @@ public class BibliotecaApp {
 
                             Book validatedBookChosen = bookCatalogue.selectMedia(books, bookChosen);
 
-                            String bookStatus = (validatedBookChosen != null) ? bookCatalogue.changeStatus(validatedBookChosen, isCheckingOut) :  "No book found with this ID";
+                            String bookStatus = (validatedBookChosen != null) ? bookCatalogue.changeStatus(validatedBookChosen, isCheckingOut, "Book") :  "No book found with this ID";
                             System.out.println(bookStatus);
                             break;
                         case 4:
@@ -89,6 +90,19 @@ public class BibliotecaApp {
                             break;
 
                         case 5:
+                            isCheckingOut = true;
+                            List<Movie> selectedMovies = movieCatalogue.retrieveSelectedList(movieCatalogue.getMovieList(), true);
+                            System.out.println("Enter the ID of the Movie you want to Checkout:");
+
+                            scanner = new Scanner(System.in);
+                            int movieChosen = scanner.nextInt();
+
+                            Movie validMovieChosen = movieCatalogue.selectMedia(selectedMovies, movieChosen);
+
+                            String movieStatus = (validMovieChosen != null) ? movieCatalogue.changeStatus(validMovieChosen, isCheckingOut, "Movie") :  "No movie found with this ID";
+                            System.out.println(movieStatus);
+                            break;
+                        case 6:
                             System.out.println("Thanks for using Biblioteca");
                             break;
                     }
@@ -102,12 +116,12 @@ public class BibliotecaApp {
 
         while (!sentOptionToListener || !quitMenu) {
             try {
-                System.out.println("Choose option from menu: ");
+                System.out.println("Choose option from menu:");
                 Scanner scanner = new Scanner(System.in);
                 int userOption = scanner.nextInt();
                 sentOptionToListener = menu.getUserOption(userOption);
 
-                if (userOption == 5) quitMenu = true;
+                if (userOption == 6) quitMenu = true;
                 if (!sentOptionToListener) System.out.println("Please insert a valid option number");
 
             } catch (InputMismatchException exception) {
@@ -119,5 +133,4 @@ public class BibliotecaApp {
     public void welcomeMessage() {
         System.out.println("Welcome to Biblioteca! Everything is up and running!");
     }
-
 }

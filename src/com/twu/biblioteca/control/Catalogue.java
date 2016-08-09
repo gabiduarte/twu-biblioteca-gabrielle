@@ -28,20 +28,20 @@ public class Catalogue {
         return null;
     }
 
-    public <T extends Media> String changeStatus(T media, boolean isCheckingOut) {
+    public <T extends Media> String changeStatus(T media, boolean isCheckingOut, String typeOfMedia) {
         if (isCheckingOut) {
             if (!media.isCheckedOut()) {
                 media.setCheckedOut(true);
-                return "Thank you! Enjoy your book";
+                return "Thank you! Enjoy your " + typeOfMedia;
             } else {
-                return "That book is not available";
+                return "That " + typeOfMedia + " is not available";
             }
         } else {
             if (media.isCheckedOut()) {
                 media.setCheckedOut(false);
-                return "Thank you for returning your book";
+                return "Thank you for returning your " + typeOfMedia;
             } else {
-                return "That is not a valid book to return";
+                return "That is not a valid " + typeOfMedia + " to return";
             }
         }
     }
