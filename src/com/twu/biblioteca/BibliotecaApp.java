@@ -1,13 +1,16 @@
 package com.twu.biblioteca;
 
 
-import com.twu.biblioteca.control.Catalogue;
+import com.twu.biblioteca.control.BookCatalogue;
 import com.twu.biblioteca.control.Menu;
+import com.twu.biblioteca.control.MovieCatalogue;
 import com.twu.biblioteca.misc.OptionListener;
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 import com.twu.biblioteca.model.Option;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
@@ -20,10 +23,13 @@ public class BibliotecaApp {
         menu.addOption(new Option(1, "List Books"));
         menu.addOption(new Option(2, "Checkout Book"));
         menu.addOption(new Option(3, "Return Book"));
-        menu.addOption(new Option(4, "Quit"));
+        menu.addOption(new Option(4, "List Movies"));
+        menu.addOption(new Option(5, "Quit"));
 
-        final Catalogue catalogue = new Catalogue();
-        catalogue.createBookList();
+        final MovieCatalogue movieCatalogue = new MovieCatalogue();
+        final BookCatalogue bookCatalogue = new BookCatalogue();
+        movieCatalogue.createMovieList();
+        bookCatalogue.createBookList();
 
         menu.setListener(new OptionListener() {
             @Override
@@ -31,28 +37,58 @@ public class BibliotecaApp {
                 if (option != null) {
                     switch (option.getId()) {
                         case 1:
-                            catalogue.showBookList(catalogue.getBookList(), true);
+                            List<Book> books = bookCatalogue.retrieveSelectedList(bookCatalogue.getBookList(), true);
+
+                            if (books != null) {
+                                System.out.println("**** Books Available ****");
+
+                                for (Book book: books) {
+                                    String bookId = Integer.toString(book.getId());
+                                    String bookYear = Integer.toString(book.getYear());
+
+                                    String output = bookId + " | " + book.getName() + " | " + book.getAuthor() + " | " + bookYear;
+                                    System.out.println(output);
+                                }
+                            } else {
+                                System.out.println("No books available");
+                            }
                             break;
                         case 2:
                         case 3:
                             boolean isCheckingOut = (option.getId() == 2);
-                            String instruction = isCheckingOut ? "Choose the book you want to checkout by ID" : "Choose the book you want to return by ID";
+                            books = bookCatalogue.retrieveSelectedList(bookCatalogue.getBookList(), isCheckingOut);
 
+                            String instruction = isCheckingOut ? "Enter the ID of the Book you want to Checkout" : "Enter the ID of the book you want to return";
                             System.out.println(instruction);
-                            catalogue.showBookList(catalogue.getBookList(), isCheckingOut);
 
                             Scanner scanner = new Scanner(System.in);
                             int bookChosen = scanner.nextInt();
 
-                            Book validatedBookChosen = catalogue.checkIfBookExistsInList(bookChosen);
+                            Book validatedBookChosen = bookCatalogue.selectMedia(books, bookChosen);
 
-                            if (validatedBookChosen != null) {
-                                catalogue.manipulateBook(validatedBookChosen, isCheckingOut);
-                            } else {
-                                System.out.println("No book found with this ID");
-                            }
+                            String bookStatus = (validatedBookChosen != null) ? bookCatalogue.changeStatus(validatedBookChosen, isCheckingOut) :  "No book found with this ID";
+                            System.out.println(bookStatus);
                             break;
                         case 4:
+                            List<Movie> movies = movieCatalogue.retrieveSelectedList(movieCatalogue.getMovieList(), true);
+
+                            if (movies != null) {
+                                System.out.println("*** Movies Available ***");
+
+                                for (Movie movie: movies) {
+                                    String movieId = Integer.toString(movie.getId());
+                                    String movieYear = Integer.toString(movie.getYear());
+                                    String output = movieId + " | " + movie.getName() + " | " + movie.getDirector()
+                                            +  " | " + movieYear + " | " + movie.getRating();
+
+                                    System.out.println(output);
+                                }
+                            } else {
+                                System.out.println("No movies available");
+                            }
+                            break;
+
+                        case 5:
                             System.out.println("Thanks for using Biblioteca");
                             break;
                     }
@@ -66,11 +102,12 @@ public class BibliotecaApp {
 
         while (!sentOptionToListener || !quitMenu) {
             try {
+                System.out.println("Choose option from menu: ");
                 Scanner scanner = new Scanner(System.in);
                 int userOption = scanner.nextInt();
                 sentOptionToListener = menu.getUserOption(userOption);
 
-                if (userOption == 4) quitMenu = true;
+                if (userOption == 5) quitMenu = true;
                 if (!sentOptionToListener) System.out.println("Please insert a valid option number");
 
             } catch (InputMismatchException exception) {

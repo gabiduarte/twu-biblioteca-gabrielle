@@ -1,103 +1,108 @@
 package com.twu.biblioteca.control;
 
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class CatalogueTest {
-    final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private List<Book> books = new ArrayList<Book>();
+    private List<Movie> movies = new ArrayList<Movie>();
+    private List<Book> availableBooks = new ArrayList<Book>();
+    private List<Movie> unavailableMovies = new ArrayList<Movie>();
     private List<Book> emptyBookList = new ArrayList<Book>();
-    private Catalogue catalogue = new Catalogue();
+
+    private BookCatalogue bookCatalogue = new BookCatalogue();
+    private MovieCatalogue movieCatalogue = new MovieCatalogue();
 
     @Before
     public void setup() {
-        System.setOut(new PrintStream(outContent));
-
         Book book1 = new Book();
-        book1.setBookID(1);
+        book1.setId(1);
         book1.setName("Harry Potter and the Cursed Child");
         book1.setAuthor("JK Rowling");
         book1.setYear(2016);
         book1.setCheckedOut(false);
         books.add(book1);
+        availableBooks.add(book1);
 
         Book book2 = new Book();
-        book2.setBookID(2);
+        book2.setId(2);
         book2.setName("Mockingjay");
         book2.setAuthor("Suzanne Collins");
         book2.setYear(2010);
         book2.setCheckedOut(true);
         books.add(book2);
 
-        catalogue.createBookList();
+        Movie movie1 = new Movie("Titanic", 1997, "James Cameron", 0);
+        Movie movie2 = new Movie("Spirited Away", 2001, "Hayao Miyazaki", 10);
+        movie1.setCheckedOut(true);
+        unavailableMovies.add(movie1);
+        movies.add(movie1);
+        movies.add(movie2);
+
+        bookCatalogue.createBookList();
+        movieCatalogue.createMovieList();
     }
 
     @Test
-    public void shouldshowListOfBooksAvailable() {
-        catalogue.showBookList(books, true);
+    public void shouldReturnListOfMediaIfAvailableOrNot() {
+        List<Book> selectedAvailableBooks = bookCatalogue.retrieveSelectedList(books, true);
+        List<Movie> selectedUnavailableMovies = movieCatalogue.retrieveSelectedList(movies, false);
 
-        String expectedString = "\n***** Books Available *****\n" +
-                "(ID | BOOK | AUTHOR | YEAR)\n\n" +
-                "1 | Harry Potter and the Cursed Child | JK Rowling | 2016\n";
-
-        assertEquals(expectedString, outContent.toString());
+        assertTrue(selectedAvailableBooks.get(0) == availableBooks.get(0));
+        assertTrue(selectedUnavailableMovies.get(0) == unavailableMovies.get(0));
     }
 
     @Test
-    public void showMessageIfBookListIsEmpty() {
-        Catalogue catalogue = new Catalogue();
-        catalogue.showBookList(emptyBookList, true);
-
-        assertEquals("No books available\n", outContent.toString());
+    public void shouldReturnNullIfNoMediaAvailable() {
+        List<Book> nullList = bookCatalogue.retrieveSelectedList(emptyBookList, true);
+        assertNull(nullList);
     }
 
     @Test
-    public void shouldCheckOutBookSuccessfully() {
+    public void shouldCheckOutMediaSuccessfully() {
         Book book = books.get(0);
-        catalogue.manipulateBook(book, true);
-        boolean expectedCheckedOutValueAfterSuccess = true;
+        assertFalse(book.isCheckedOut());
 
-        assertTrue(expectedCheckedOutValueAfterSuccess == book.isCheckedOut());
-        assertEquals("Thank you! Enjoy the book\n", outContent.toString());
+        bookCatalogue.changeStatus(book, true);
+        assertTrue(book.isCheckedOut());
     }
 
     @Test
-    public void shouldShowUnsuccessfulMessageIfBookIsAlreadyCheckedOut() {
+    public void shouldReturnUnsuccessfulMessageIfMediaIsAlreadyCheckedOut() {
         Book book = books.get(1);
-        catalogue.manipulateBook(book, true);
+        String bookStatus = bookCatalogue.changeStatus(book, true);
 
-        assertEquals("That book is not available.\n", outContent.toString());
+        assertEquals("That book is not available", bookStatus);
     }
 
     @Test
-    public void shouldReturnNullIfBookIDDoesntMatch() {
+    public void shouldReturnNullIfMediaIDDoesntMatch() {
         String book = books.get(0).getName();
-        assertEquals(book, catalogue.checkIfBookExistsInList(1).getName());
-        assertNull(catalogue.checkIfBookExistsInList(393));
+        assertEquals(book, bookCatalogue.selectMedia(books, 1).getName());
+        assertNull(bookCatalogue.selectMedia(books, 393));
     }
 
     @Test
-    public void shouldReturnBookSuccessfully() {
+    public void shouldReturnMediaSuccessfully() {
         Book book = books.get(1);
-        catalogue.manipulateBook(book, false);
-        boolean expectedReturnValueAfterSuccess = false;
-        assertTrue(expectedReturnValueAfterSuccess == book.isCheckedOut());
-        assertEquals("Thank you for returning the book.\n", outContent.toString());
+        assertTrue(book.isCheckedOut());
+
+        bookCatalogue.changeStatus(book, false);
+        assertFalse(book.isCheckedOut());
     }
 
     @Test
-    public void shouldShowUnsuccessfulMessageIfBookIsAlreadyReturned() {
+    public void shouldShowUnsuccessfulMessageIfMediaIsAlreadyReturned() {
         Book book = books.get(0);
-        catalogue.manipulateBook(book, false);
+        String bookStatus = bookCatalogue.changeStatus(book, false);
 
-        assertEquals("That is not a valid book to return.\n", outContent.toString());
+        assertEquals("That is not a valid book to return", bookStatus);
     }
 }

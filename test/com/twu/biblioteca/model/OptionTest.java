@@ -1,6 +1,5 @@
 package com.twu.biblioteca.model;
 
-import com.twu.biblioteca.model.Option;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -1,6 +1,6 @@
 package com.twu.biblioteca.control;
 
-import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Media;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,74 +8,41 @@ import java.util.List;
 
 public class Catalogue {
 
-    private static List<Book> books = new ArrayList<Book>();
-
-    public void showBookList(List<Book> books, boolean showAvailableBooks) {
-        if (books.size() > 0 ) {
-            System.out.println("\n***** Books Available *****\n(ID | BOOK | AUTHOR | YEAR)\n");
-            for (int i = 0; i < books.size(); i++) {
-                Book currentBook = books.get(i);
-
-                if (showAvailableBooks) {
-                    if (currentBook.isCheckedOut()) continue;
-                } else {
-                    if (!currentBook.isCheckedOut()) continue;
-                }
-
-                String currentBookID = Integer.toString(currentBook.getBookID());
-                String currentBookYear = Integer.toString(currentBook.getYear());
-                String output = currentBookID + " | " + currentBook.getName() + " | " + currentBook.getAuthor() + " | " + currentBookYear;
-                System.out.println(output);
-            }
-        } else {
-            System.out.println("No books available");
-        }
-    }
-
-    public void manipulateBook(Book book, boolean isCheckingOut) {
-        if (isCheckingOut) {
-            if (!book.isCheckedOut()) {
-                book.setCheckedOut(true);
-                System.out.println("Thank you! Enjoy the book");
-            } else {
-                System.out.println("That book is not available.");
-            }
-        } else {
-            if (book.isCheckedOut()) {
-                book.setCheckedOut(false);
-                System.out.println("Thank you for returning the book.");
-            } else {
-                System.out.println("That is not a valid book to return.");
+    public <T extends Media> List<T> retrieveSelectedList(List<T> list, boolean isAvailable) {
+        List<T> selectedMovies = new ArrayList<T>();
+        for (T media: list) {
+            if (!media.isCheckedOut() == isAvailable) {
+                selectedMovies.add(media);
             }
         }
+        return (list.size() > 0) ? selectedMovies : null;
     }
 
-    public Book checkIfBookExistsInList(int userOption) {
-        for (Book book: books) {
-            if (userOption == book.getBookID()) {
-                return book;
+    public <T extends Media> T selectMedia(List<T> list, int userOption) {
+
+        for (T media: list) {
+            if (userOption == media.getId()) {
+                return media;
             }
         }
         return null;
     }
 
-    public void createBookList() {
-        Book book1 = new Book();
-        book1.setBookID(1);
-        book1.setName("Harry Potter and the Cursed Child");
-        book1.setAuthor("JK Rowling");
-        book1.setYear(2016);
-        books.add(book1);
-
-        Book book2 = new Book();
-        book2.setBookID(2);
-        book2.setName("Mockingjay");
-        book2.setAuthor("Suzanne Collins");
-        book2.setYear(2010);
-        books.add(book2);
-    }
-
-    public List<Book> getBookList() {
-        return books;
+    public <T extends Media> String changeStatus(T media, boolean isCheckingOut) {
+        if (isCheckingOut) {
+            if (!media.isCheckedOut()) {
+                media.setCheckedOut(true);
+                return "Thank you! Enjoy your book";
+            } else {
+                return "That book is not available";
+            }
+        } else {
+            if (media.isCheckedOut()) {
+                media.setCheckedOut(false);
+                return "Thank you for returning your book";
+            } else {
+                return "That is not a valid book to return";
+            }
+        }
     }
 }
