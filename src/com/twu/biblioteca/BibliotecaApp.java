@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 public class BibliotecaApp {
     private static UserController userController = new UserController();
+    private static User currentUser;
 
     public static void main(String[] args) {
         BibliotecaApp biblioteca = new BibliotecaApp();
@@ -31,7 +32,9 @@ public class BibliotecaApp {
         menu.addOption(new Option(3, "Return Book"));
         menu.addOption(new Option(4, "List Movies"));
         menu.addOption(new Option(5, "Checkout Movie"));
-        menu.addOption(new Option(6, "Quit"));
+        menu.addOption(new Option(6, "See Profile"));
+        menu.addOption(new Option(7, "Quit"));
+
 
         final MovieCatalogue movieCatalogue = new MovieCatalogue();
         final BookCatalogue bookCatalogue = new BookCatalogue();
@@ -109,6 +112,11 @@ public class BibliotecaApp {
                             System.out.println(movieStatus);
                             break;
                         case 6:
+                            System.out.println("View My Profile:");
+                            String userInformation = "Name: " + currentUser.getName() + "\nAddress: " + currentUser.getEmail() + "\nPhone: " + currentUser.getPhone();
+                            System.out.println(userInformation);
+                            break;
+                        case 7:
                             System.out.println("Thanks for using Biblioteca");
                             break;
                     }
@@ -127,7 +135,7 @@ public class BibliotecaApp {
                 int userOption = scanner.nextInt();
                 sentOptionToListener = menu.getUserOption(userOption);
 
-                if (userOption == 6) quitMenu = true;
+                if (userOption == 7) quitMenu = true;
                 if (!sentOptionToListener) System.out.println("Please insert a valid option number");
 
             } catch (InputMismatchException exception) {
@@ -158,6 +166,7 @@ public class BibliotecaApp {
                         int typedPassword = scanner.nextInt();
 
                         if (userController.verifyPassword(attemptUser, typedPassword)) {
+                            currentUser = attemptUser;
                             userLoggedIn = true;
                             userPasswordIsCorrect = true;
                         } else {
