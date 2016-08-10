@@ -79,7 +79,7 @@ public class CatalogueTest {
         Book book = books.get(1);
         String bookStatus = bookCatalogue.changeStatus(book, true, "Book");
 
-        assertEquals("That Book is not available", bookStatus);
+        assertEquals("That Book is not available.", bookStatus);
     }
 
     @Test
@@ -103,6 +103,6 @@ public class CatalogueTest {
         Book book = books.get(0);
         String bookStatus = bookCatalogue.changeStatus(book, false, "Book");
 
-        assertEquals("That is not a valid Book to return", bookStatus);
+        assertEquals("That is not a valid Book to return.", bookStatus);
     }
 }

@@ -33,16 +33,16 @@ public class Catalogue {
         if (isCheckingOut) {
             if (!media.isCheckedOut()) {
                 media.setCheckedOut(true);
-                return Message.CHECKOUT_SUCCESSFUL + typeOfMedia;
+                return String.format(Message.CHECKOUT_SUCCESSFUL, typeOfMedia);
             } else {
-                return Message.CHECKOUT_THAT + typeOfMedia + Message.CHECKOUT_UNSUCCESSFUL;
+                return String.format(Message.CHECKOUT_UNSUCCESSFUL, typeOfMedia);
             }
         } else {
             if (media.isCheckedOut()) {
                 media.setCheckedOut(false);
-                return Message.RETURN_SUCCESSFUL + typeOfMedia;
+                return String.format(Message.RETURN_SUCCESSFUL, typeOfMedia);
             } else {
-                return Message.RETURN_UNSUCCESSFUL + typeOfMedia + Message.TO_RETURN;
+                return String.format(Message.RETURN_UNSUCCESSFUL, typeOfMedia);
             }
         }
     }

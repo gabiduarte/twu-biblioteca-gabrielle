@@ -12,9 +12,11 @@ public class UserController {
     public void createUsers() {
         User user1 = new User("Gabi", "ga@gm.com", "111-2222", 90903030, 123456);
         User user2 = new User("Mike", "mike@aa.com", "111-1111", 30301234, 654321);
+        User user3 = new User("a", "a", "1", 111, 1);
 
         users.add(user1);
         users.add(user2);
+        users.add(user3);
     }
 
     public User findUser(String userLibraryNumber) {

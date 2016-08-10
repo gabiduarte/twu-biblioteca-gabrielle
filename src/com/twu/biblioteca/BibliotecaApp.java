@@ -52,13 +52,11 @@ public class BibliotecaApp {
 
                             if (books != null) {
                                 System.out.println(Message.BOOKS_AVAILABLE);
+                                System.out.println(Message.BOOK_COLUMNS);
 
                                 for (Book book: books) {
-                                    String bookId = Integer.toString(book.getId());
-                                    String bookYear = Integer.toString(book.getYear());
-
-                                    String output = bookId + " | " + book.getName() + " | " + book.getAuthor() + " | " + bookYear;
-                                    System.out.println(output);
+                                    String bookInfo = String.format(Message.BOOK_FORMAT, book.getId(), book.getName(), book.getYear());
+                                    System.out.println(bookInfo);
                                 }
                             } else {
                                 System.out.println(Message.NO_BOOKS);
@@ -85,14 +83,11 @@ public class BibliotecaApp {
 
                             if (movies != null) {
                                 System.out.println(Message.MOVIES_AVAILABLE);
+                                System.out.println(Message.MOVIE_COLUMNS);
 
                                 for (Movie movie: movies) {
-                                    String movieId = Integer.toString(movie.getId());
-                                    String movieYear = Integer.toString(movie.getYear());
-                                    String output = movieId + " | " + movie.getName() + " | " + movie.getDirector()
-                                            +  " | " + movieYear + " | " + movie.getRating();
-
-                                    System.out.println(output);
+                                    String movieInfo = String.format(Message.MOVIE_FORMAT, movie.getId(), movie.getName(), movie.getDirector(), movie.getYear(), movie.getRating());
+                                    System.out.println(movieInfo);
                                 }
                             } else {
                                 System.out.println(Message.NO_MOVIES);
@@ -114,7 +109,7 @@ public class BibliotecaApp {
                             break;
                         case 6:
                             System.out.println(Message.VIEW_PROFILE);
-                            String userInformation = "Name: " + currentUser.getName() + "\nAddress: " + currentUser.getEmail() + "\nPhone: " + currentUser.getPhone();
+                            String userInformation = String.format(Message.PROFILE_FORMAT, currentUser.getName(), currentUser.getEmail(), currentUser.getPhone());
                             System.out.println(userInformation);
                             break;
                         case 7:

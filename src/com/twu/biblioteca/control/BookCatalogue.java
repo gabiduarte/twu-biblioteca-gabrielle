@@ -20,6 +20,7 @@ public class BookCatalogue extends Catalogue {
         book2.setId(2);
         book2.setName("Mockingjay");
         book2.setAuthor("Suzanne Collins");
+        book2.setCheckedOut(true);
         book2.setYear(2010);
         books.add(book2);
     }
