@@ -4,19 +4,25 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.control.BookCatalogue;
 import com.twu.biblioteca.control.Menu;
 import com.twu.biblioteca.control.MovieCatalogue;
+import com.twu.biblioteca.control.UserController;
 import com.twu.biblioteca.misc.OptionListener;
 import com.twu.biblioteca.model.Book;
 import com.twu.biblioteca.model.Movie;
 import com.twu.biblioteca.model.Option;
+import com.twu.biblioteca.model.User;
 
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
+    private static UserController userController = new UserController();
 
     public static void main(String[] args) {
         BibliotecaApp biblioteca = new BibliotecaApp();
+        userController.createUsers();
+
+        biblioteca.login();
         biblioteca.welcomeMessage();
 
         Menu menu = new Menu();
@@ -132,5 +138,38 @@ public class BibliotecaApp {
 
     public void welcomeMessage() {
         System.out.println("Welcome to Biblioteca! Everything is up and running!");
+    }
+
+    public void login() {
+        boolean userLoggedIn = false;
+
+        while(!userLoggedIn) {
+            try {
+                System.out.println("Enter your Library Number to continue:");
+                Scanner scanner = new Scanner(System.in);
+                String userNumber = scanner.next();
+                User attemptUser = userController.findUser(userNumber);
+
+                if (attemptUser != null) {
+                    boolean userPasswordIsCorrect = false;
+
+                    while (!userPasswordIsCorrect) {
+                        System.out.println("Please insert your password:");
+                        int typedPassword = scanner.nextInt();
+
+                        if (userController.verifyPassword(attemptUser, typedPassword)) {
+                            userLoggedIn = true;
+                            userPasswordIsCorrect = true;
+                        } else {
+                            System.out.println("Wrong password.");
+                        }
+                    }
+                } else {
+                    System.out.println("Wrong Library Number.");
+                }
+            } catch (InputMismatchException exception) {
+                System.out.println("Please insert numbers only.");
+            }
+        }
     }
 }
