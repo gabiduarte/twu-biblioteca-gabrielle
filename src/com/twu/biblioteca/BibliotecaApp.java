@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 
+import com.twu.biblioteca.constants.Message;
 import com.twu.biblioteca.control.BookCatalogue;
 import com.twu.biblioteca.control.Menu;
 import com.twu.biblioteca.control.MovieCatalogue;
@@ -50,7 +51,7 @@ public class BibliotecaApp {
                             List<Book> books = bookCatalogue.retrieveSelectedList(bookCatalogue.getBookList(), true);
 
                             if (books != null) {
-                                System.out.println("**** Books Available ****");
+                                System.out.println(Message.BOOKS_AVAILABLE);
 
                                 for (Book book: books) {
                                     String bookId = Integer.toString(book.getId());
@@ -60,7 +61,7 @@ public class BibliotecaApp {
                                     System.out.println(output);
                                 }
                             } else {
-                                System.out.println("No books available");
+                                System.out.println(Message.NO_BOOKS);
                             }
                             break;
                         case 2:
@@ -68,7 +69,7 @@ public class BibliotecaApp {
                             boolean isCheckingOut = (option.getId() == 2);
                             books = bookCatalogue.retrieveSelectedList(bookCatalogue.getBookList(), isCheckingOut);
 
-                            String instruction = isCheckingOut ? "Enter the ID of the Book you want to Checkout" : "Enter the ID of the book you want to return";
+                            String instruction = isCheckingOut ? Message.CHECKOUT_BOOK_ID : Message.RETURN_BOOK_ID;
                             System.out.println(instruction);
 
                             Scanner scanner = new Scanner(System.in);
@@ -76,14 +77,14 @@ public class BibliotecaApp {
 
                             Book validatedBookChosen = bookCatalogue.selectMedia(books, bookChosen);
 
-                            String bookStatus = (validatedBookChosen != null) ? bookCatalogue.changeStatus(validatedBookChosen, isCheckingOut, "Book") :  "No book found with this ID";
+                            String bookStatus = (validatedBookChosen != null) ? bookCatalogue.changeStatus(validatedBookChosen, isCheckingOut, "Book") :  Message.NO_BOOK_FOUND;
                             System.out.println(bookStatus);
                             break;
                         case 4:
                             List<Movie> movies = movieCatalogue.retrieveSelectedList(movieCatalogue.getMovieList(), true);
 
                             if (movies != null) {
-                                System.out.println("*** Movies Available ***");
+                                System.out.println(Message.MOVIES_AVAILABLE);
 
                                 for (Movie movie: movies) {
                                     String movieId = Integer.toString(movie.getId());
@@ -94,30 +95,30 @@ public class BibliotecaApp {
                                     System.out.println(output);
                                 }
                             } else {
-                                System.out.println("No movies available");
+                                System.out.println(Message.NO_MOVIES);
                             }
                             break;
 
                         case 5:
                             isCheckingOut = true;
                             List<Movie> selectedMovies = movieCatalogue.retrieveSelectedList(movieCatalogue.getMovieList(), true);
-                            System.out.println("Enter the ID of the Movie you want to Checkout:");
+                            System.out.println(Message.INSERT_MOVIE_ID);
 
                             scanner = new Scanner(System.in);
                             int movieChosen = scanner.nextInt();
 
                             Movie validMovieChosen = movieCatalogue.selectMedia(selectedMovies, movieChosen);
 
-                            String movieStatus = (validMovieChosen != null) ? movieCatalogue.changeStatus(validMovieChosen, isCheckingOut, "Movie") :  "No movie found with this ID";
+                            String movieStatus = (validMovieChosen != null) ? movieCatalogue.changeStatus(validMovieChosen, isCheckingOut, "Movie") :  Message.NO_MOVIE_FOUND;
                             System.out.println(movieStatus);
                             break;
                         case 6:
-                            System.out.println("View My Profile:");
+                            System.out.println(Message.VIEW_PROFILE);
                             String userInformation = "Name: " + currentUser.getName() + "\nAddress: " + currentUser.getEmail() + "\nPhone: " + currentUser.getPhone();
                             System.out.println(userInformation);
                             break;
                         case 7:
-                            System.out.println("Thanks for using Biblioteca");
+                            System.out.println(Message.QUIT_MESSAGE);
                             break;
                     }
                 }
@@ -130,22 +131,22 @@ public class BibliotecaApp {
 
         while (!sentOptionToListener || !quitMenu) {
             try {
-                System.out.println("Choose option from menu:");
+                System.out.println(Message.CHOOSE_OPTION);
                 Scanner scanner = new Scanner(System.in);
                 int userOption = scanner.nextInt();
                 sentOptionToListener = menu.getUserOption(userOption);
 
                 if (userOption == 7) quitMenu = true;
-                if (!sentOptionToListener) System.out.println("Please insert a valid option number");
+                if (!sentOptionToListener) System.out.println(Message.INSERT_VALID_OPTION);
 
             } catch (InputMismatchException exception) {
-                System.out.println("Please insert a number");
+                System.out.println(Message.INSERT_NUMBER);
             }
         }
     }
 
     public void welcomeMessage() {
-        System.out.println("Welcome to Biblioteca! Everything is up and running!");
+        System.out.println(Message.WELCOME_MESSAGE);
     }
 
     public void login() {
@@ -153,7 +154,7 @@ public class BibliotecaApp {
 
         while(!userLoggedIn) {
             try {
-                System.out.println("Enter your Library Number to continue:");
+                System.out.println(Message.LOGIN_MESSAGE);
                 Scanner scanner = new Scanner(System.in);
                 String userNumber = scanner.next();
                 User attemptUser = userController.findUser(userNumber);
@@ -162,7 +163,7 @@ public class BibliotecaApp {
                     boolean userPasswordIsCorrect = false;
 
                     while (!userPasswordIsCorrect) {
-                        System.out.println("Please insert your password:");
+                        System.out.println(Message.ASK_PASSWORD);
                         int typedPassword = scanner.nextInt();
 
                         if (userController.verifyPassword(attemptUser, typedPassword)) {
@@ -170,14 +171,14 @@ public class BibliotecaApp {
                             userLoggedIn = true;
                             userPasswordIsCorrect = true;
                         } else {
-                            System.out.println("Wrong password.");
+                            System.out.println(Message.WRONG_PASSWORD);
                         }
                     }
                 } else {
-                    System.out.println("Wrong Library Number.");
+                    System.out.println(Message.WRONG_LIBRARY_NUMBER);
                 }
             } catch (InputMismatchException exception) {
-                System.out.println("Please insert numbers only.");
+                System.out.println(Message.INSERT_NUMBER);
             }
         }
     }
