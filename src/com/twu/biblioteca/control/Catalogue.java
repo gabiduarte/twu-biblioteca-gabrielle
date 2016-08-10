@@ -1,5 +1,6 @@
 package com.twu.biblioteca.control;
 
+import com.twu.biblioteca.constants.Message;
 import com.twu.biblioteca.model.Media;
 
 import java.util.ArrayList;
@@ -32,16 +33,16 @@ public class Catalogue {
         if (isCheckingOut) {
             if (!media.isCheckedOut()) {
                 media.setCheckedOut(true);
-                return "Thank you! Enjoy your " + typeOfMedia;
+                return Message.CHECKOUT_SUCCESSFUL + typeOfMedia;
             } else {
-                return "That " + typeOfMedia + " is not available";
+                return Message.CHECKOUT_THAT + typeOfMedia + Message.CHECKOUT_UNSUCCESSFUL;
             }
         } else {
             if (media.isCheckedOut()) {
                 media.setCheckedOut(false);
-                return "Thank you for returning your " + typeOfMedia;
+                return Message.RETURN_SUCCESSFUL + typeOfMedia;
             } else {
-                return "That is not a valid " + typeOfMedia + " to return";
+                return Message.RETURN_UNSUCCESSFUL + typeOfMedia + Message.TO_RETURN;
             }
         }
     }

@@ -21,4 +21,10 @@ public class Message {
     public static final String RETURN_BOOK_ID = "Enter the ID of the book you want to return";
     public static final String BOOKS_AVAILABLE = "**** Books Available ****";
     public static final String VIEW_PROFILE = "View My Profile:";
+    public static final String CHECKOUT_SUCCESSFUL = "Thank you! Enjoy your ";
+    public static final String CHECKOUT_UNSUCCESSFUL = "is not available";
+    public static final String CHECKOUT_THAT = "That ";
+    public static final String RETURN_SUCCESSFUL = "Thank you for returning your ";
+    public static final String RETURN_UNSUCCESSFUL = "That is not a valid ";
+    public static final String TO_RETURN = " to Return";
 }
