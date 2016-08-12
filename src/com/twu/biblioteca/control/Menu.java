@@ -57,4 +57,14 @@ public class Menu {
     public ArrayList<Option> getOptionList() {
         return options;
     }
+
+    public void createOptions() {
+        options.add(new Option(1, "List Books"));
+        options.add(new Option(2, "Checkout Book"));
+        options.add(new Option(3, "Return Book"));
+        options.add(new Option(4, "List Movies"));
+        options.add(new Option(5, "Checkout Movie"));
+        options.add(new Option(6, "See Profile"));
+        options.add(new Option(7, "Quit"));
+    }
 }

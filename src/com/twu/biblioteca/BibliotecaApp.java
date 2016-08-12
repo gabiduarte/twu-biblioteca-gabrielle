@@ -6,14 +6,12 @@ import com.twu.biblioteca.control.BookCatalogue;
 import com.twu.biblioteca.control.Menu;
 import com.twu.biblioteca.control.MovieCatalogue;
 import com.twu.biblioteca.control.UserController;
+import com.twu.biblioteca.control.commands.*;
 import com.twu.biblioteca.misc.OptionListener;
-import com.twu.biblioteca.model.Book;
-import com.twu.biblioteca.model.Movie;
 import com.twu.biblioteca.model.Option;
 import com.twu.biblioteca.model.User;
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class BibliotecaApp {
@@ -23,19 +21,11 @@ public class BibliotecaApp {
     public static void main(String[] args) {
         final BibliotecaApp biblioteca = new BibliotecaApp();
         userController.createUsers();
-
         biblioteca.login();
         biblioteca.welcomeMessage();
 
         Menu menu = new Menu();
-        menu.addOption(new Option(1, "List Books"));
-        menu.addOption(new Option(2, "Checkout Book"));
-        menu.addOption(new Option(3, "Return Book"));
-        menu.addOption(new Option(4, "List Movies"));
-        menu.addOption(new Option(5, "Checkout Movie"));
-        menu.addOption(new Option(6, "See Profile"));
-        menu.addOption(new Option(7, "Quit"));
-
+        menu.createOptions();
 
         final MovieCatalogue movieCatalogue = new MovieCatalogue();
         final BookCatalogue bookCatalogue = new BookCatalogue();
@@ -48,22 +38,28 @@ public class BibliotecaApp {
                 if (option != null) {
                     switch (option.getId()) {
                         case 1:
-                            biblioteca.listBooks(bookCatalogue);
+                            Command listBook = new ListBookCommand(bookCatalogue);
+                            listBook.execute();
                             break;
                         case 2:
-                            biblioteca.changeStatusOfBook(bookCatalogue, true);
+                            Command changeBook = new ChangeBookCommand(bookCatalogue, true);
+                            changeBook.execute();
                             break;
                         case 3:
-                            biblioteca.changeStatusOfBook(bookCatalogue, false);
+                            changeBook = new ChangeBookCommand(bookCatalogue, false);
+                            changeBook.execute();
                             break;
                         case 4:
-                            biblioteca.listMovies(movieCatalogue);
+                            Command listMovie = new ListMovieCommand(movieCatalogue);
+                            listMovie.execute();
                             break;
                         case 5:
-                            biblioteca.checkOutMovie(movieCatalogue);
+                            Command checkOutMovie = new CheckoutMovieCommand(movieCatalogue);
+                            checkOutMovie.execute();
                             break;
                         case 6:
-                            biblioteca.viewProfile();
+                            Command seeProfile = new SeeProfileCommand(currentUser);
+                            seeProfile.execute();
                             break;
                         case 7:
                             System.out.println(Message.QUIT_MESSAGE);
@@ -129,72 +125,5 @@ public class BibliotecaApp {
                 System.out.println(Message.INSERT_NUMBER);
             }
         }
-    }
-
-    public void listBooks(BookCatalogue bookCatalogue) {
-        List<Book> books = bookCatalogue.retrieveSelectedList(bookCatalogue.getBookList(), true);
-
-        if (books != null) {
-            System.out.println(Message.BOOKS_AVAILABLE);
-            System.out.println(Message.BOOK_COLUMNS);
-
-            for (Book book: books) {
-                String bookInfo = String.format(Message.BOOK_FORMAT, book.getId(), book.getName(), book.getYear());
-                System.out.println(bookInfo);
-            }
-        } else {
-            System.out.println(Message.NO_BOOKS);
-        }
-    }
-
-    public void changeStatusOfBook(BookCatalogue bookCatalogue, boolean checkOut) {
-        boolean isCheckingOut = checkOut;
-        List<Book> books = bookCatalogue.retrieveSelectedList(bookCatalogue.getBookList(), isCheckingOut);
-
-        String instruction = isCheckingOut ? Message.CHECKOUT_BOOK_ID : Message.RETURN_BOOK_ID;
-        System.out.println(instruction);
-
-        Scanner scanner = new Scanner(System.in);
-        int bookChosen = scanner.nextInt();
-
-        Book validatedBookChosen = bookCatalogue.selectMedia(books, bookChosen);
-
-        String bookStatus = (validatedBookChosen != null) ? bookCatalogue.changeStatus(validatedBookChosen, isCheckingOut, "Book") :  Message.NO_BOOK_FOUND;
-        System.out.println(bookStatus);
-    }
-
-    public void listMovies(MovieCatalogue movieCatalogue) {
-        List<Movie> movies = movieCatalogue.retrieveSelectedList(movieCatalogue.getMovieList(), true);
-
-        if (movies != null) {
-            System.out.println(Message.MOVIES_AVAILABLE);
-            System.out.println(Message.MOVIE_COLUMNS);
-
-            for (Movie movie: movies) {
-                String movieInfo = String.format(Message.MOVIE_FORMAT, movie.getId(), movie.getName(), movie.getDirector(), movie.getYear(), movie.getRating());
-                System.out.println(movieInfo);
-            }
-        } else {
-            System.out.println(Message.NO_MOVIES);
-        }
-    }
-
-    public void checkOutMovie(MovieCatalogue movieCatalogue) {
-        List<Movie> selectedMovies = movieCatalogue.retrieveSelectedList(movieCatalogue.getMovieList(), true);
-        System.out.println(Message.INSERT_MOVIE_ID);
-
-        Scanner scanner = new Scanner(System.in);
-        int movieChosen = scanner.nextInt();
-
-        Movie validMovieChosen = movieCatalogue.selectMedia(selectedMovies, movieChosen);
-
-        String movieStatus = (validMovieChosen != null) ? movieCatalogue.changeStatus(validMovieChosen, true, "Movie") :  Message.NO_MOVIE_FOUND;
-        System.out.println(movieStatus);
-    }
-
-    public void viewProfile() {
-        System.out.println(Message.VIEW_PROFILE);
-        String userInformation = String.format(Message.PROFILE_FORMAT, currentUser.getName(), currentUser.getEmail(), currentUser.getPhone());
-        System.out.println(userInformation);
     }
 }
