@@ -38,28 +38,22 @@ public class BibliotecaApp {
                 if (option != null) {
                     switch (option.getId()) {
                         case 1:
-                            Command listBook = new ListBookCommand(bookCatalogue);
-                            listBook.execute();
+                            new ListBookCommand(bookCatalogue).execute();
                             break;
                         case 2:
-                            Command changeBook = new ChangeBookCommand(bookCatalogue, true);
-                            changeBook.execute();
+                            new ChangeBookCommand(bookCatalogue, true).execute();
                             break;
                         case 3:
-                            changeBook = new ChangeBookCommand(bookCatalogue, false);
-                            changeBook.execute();
+                            new ChangeBookCommand(bookCatalogue, false).execute();
                             break;
                         case 4:
-                            Command listMovie = new ListMovieCommand(movieCatalogue);
-                            listMovie.execute();
+                            new ListMovieCommand(movieCatalogue).execute();
                             break;
                         case 5:
-                            Command checkOutMovie = new CheckoutMovieCommand(movieCatalogue);
-                            checkOutMovie.execute();
+                            new CheckoutMovieCommand(movieCatalogue).execute();
                             break;
                         case 6:
-                            Command seeProfile = new SeeProfileCommand(currentUser);
-                            seeProfile.execute();
+                            new SeeProfileCommand(currentUser).execute();
                             break;
                         case 7:
                             System.out.println(Message.QUIT_MESSAGE);
