@@ -19,7 +19,7 @@ public class Message {
     public static final String NO_BOOKS = "No books available.";
     public static final String CHECKOUT_BOOK_ID = "Enter the ID of the Book you want to Checkout.";
     public static final String RETURN_BOOK_ID = "Enter the ID of the book you want to return.";
-    public static final String BOOKS_AVAILABLE = "***** MOVIES AVAILABLE *****";
+    public static final String BOOKS_AVAILABLE = "***** BOOKS AVAILABLE *****";
     public static final String VIEW_PROFILE = "***** VIEW MY PROFILE *****";
     public static final String CHECKOUT_SUCCESSFUL = "Thank you! Enjoy your %s.";
     public static final String CHECKOUT_UNSUCCESSFUL = "That %s is not available.";
